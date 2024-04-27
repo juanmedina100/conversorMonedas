@@ -32,12 +32,13 @@ public class ConversorApi {
             System.out.print("Elije una opción: ");
             int seleccionar = Integer.parseInt(moneda.nextLine());
 
-            System.out.print("Escribe una cantidad a convertir : ");
+            
         int calcular = Integer.parseInt(moneda.nextLine());
         if(seleccionar == 9){
             break;
         }
-
+        System.out.print("Escribe una cantidad a convertir : ");
+            
             String primerMoneda = "";
             String segundaMoneda = "";
             switch (seleccionar) {
