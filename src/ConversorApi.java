@@ -28,11 +28,8 @@ public class ConversorApi {
             System.out.println("9 - Salir");
             System.out.println("*********************************");
 
-
             System.out.print("Elije una opción: ");
             int seleccionar = Integer.parseInt(moneda.nextLine());
-
-            
 
         if(seleccionar == 9){
             break;
@@ -76,43 +73,34 @@ public class ConversorApi {
                     break;
             }
 
-
-
         var apiKey = "878227dd2d7c1a3e2cad6bd3";
         String direccion = "https://v6.exchangerate-api.com/v6/" + apiKey + "/pair/"+primerMoneda+"/"+segundaMoneda;
 
         try {
             String url_str = direccion;
 
-            // Making Request
+            // Conectando
             URL url = new URL(url_str);
             HttpURLConnection request = (HttpURLConnection) url.openConnection();
             request.connect();
 
-            // Convert to JSON
+            // Convertir a JSON
             JsonParser jp = new JsonParser();
             JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
             JsonObject jsonobj = root.getAsJsonObject();
 
-            // Accessing object
+            // Mostrando respuestas
             double respuesta = 0.0;
             double myCalcular = Double.parseDouble(String.valueOf(calcular));
             double req_result = jsonobj.get("conversion_rate").getAsDouble();
             respuesta = req_result*myCalcular;
             System.out.println("Valor de cambio : "+req_result);
             System.out.println("El resultado es "+Math.round(respuesta*100.0)/100.0+" de "+primerMoneda+" a "+segundaMoneda);
-
-
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         } catch (Exception e) {
             System.out.println("An unexpected error occurred: " + e.getCause());
         }
-
-
-
-
-
         }
 
     }
