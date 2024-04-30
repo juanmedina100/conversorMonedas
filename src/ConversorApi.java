@@ -33,12 +33,13 @@ public class ConversorApi {
             int seleccionar = Integer.parseInt(moneda.nextLine());
 
             
-        int calcular = Integer.parseInt(moneda.nextLine());
+
         if(seleccionar == 9){
             break;
         }
-        System.out.print("Escribe una cantidad a convertir : ");
-            
+            System.out.print("Escribe una cantidad a convertir : ");
+            int calcular = Integer.parseInt(moneda.nextLine());
+
             String primerMoneda = "";
             String segundaMoneda = "";
             switch (seleccionar) {
@@ -99,7 +100,7 @@ public class ConversorApi {
             double req_result = jsonobj.get("conversion_rate").getAsDouble();
             respuesta = req_result*myCalcular;
             System.out.println("Valor de cambio : "+req_result);
-            System.out.println("El resultado es "+respuesta+" de "+primerMoneda+" a "+segundaMoneda);
+            System.out.println("El resultado es "+Math.round(respuesta*100.0)/100.0+" de "+primerMoneda+" a "+segundaMoneda);
 
 
         } catch (IOException e) {
