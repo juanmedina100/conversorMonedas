@@ -1,12 +1,18 @@
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Scanner;
 
 public class ConversorApi {
@@ -80,26 +86,28 @@ public class ConversorApi {
             String url_str = direccion;
 
             // Conectando
-            URL url = new URL(url_str);
-            HttpURLConnection request = (HttpURLConnection) url.openConnection();
-            request.connect();
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url_str)).build();
+            HttpResponse<String> response = client
+                    .send(request, HttpResponse.BodyHandlers.ofString());
 
             // Convertir a JSON
-            JsonParser jp = new JsonParser();
-            JsonElement root = jp.parse(new InputStreamReader((InputStream) request.getContent()));
-            JsonObject jsonobj = root.getAsJsonObject();
+            Gson gson = new Gson();
+            JsonObject jsonObject = gson.fromJson((response.body()), JsonObject.class);
+            double req_result = jsonObject.get("conversion_rate").getAsDouble();
+
+            double respuesta;
+            double myCalcular = Double.parseDouble(String.valueOf(calcular));
 
             // Mostrando respuestas
-            double respuesta = 0.0;
-            double myCalcular = Double.parseDouble(String.valueOf(calcular));
-            double req_result = jsonobj.get("conversion_rate").getAsDouble();
             respuesta = req_result*myCalcular;
             System.out.println("Valor de cambio : "+req_result);
             System.out.println("El resultado es "+Math.round(respuesta*100.0)/100.0+" de "+primerMoneda+" a "+segundaMoneda);
         } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("An unexpected error occurred: " + e.getCause());
+            System.out.println("Ha ocurrido un error : " + e.getCause());
         }
         }
 
